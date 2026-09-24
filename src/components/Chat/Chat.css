@@ -1,0 +1,25 @@
+.chat {
+  width: min(900px, 100%);
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  box-shadow:
+    0 0 16px rgba(0, 0, 0, 0.08);
+}
+
+.chat__header {
+  min-height: 64px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.chat__header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}

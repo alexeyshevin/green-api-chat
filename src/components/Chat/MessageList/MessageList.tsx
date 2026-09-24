@@ -1,4 +1,5 @@
 import type { Message } from '../../../types/message';
+import './MessageList.css';
 
 type Props = {
   messages: Message[];

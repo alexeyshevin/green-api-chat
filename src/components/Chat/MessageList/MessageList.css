@@ -1,0 +1,42 @@
+.message-list {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  background: #e7ebef;
+}
+
+.message {
+  max-width: min(70%, 520px);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 12px;
+  word-break: break-word;
+}
+
+.message p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.message time {
+  align-self: flex-end;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.message--incoming {
+  align-self: flex-start;
+  background: #ffffff;
+  border-bottom-left-radius: 4px;
+}
+
+.message--outgoing {
+  align-self: flex-end;
+  background: #d9fdd3;
+  border-bottom-right-radius: 4px;
+}

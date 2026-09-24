@@ -3,6 +3,7 @@ import {
     type SyntheticEvent,
     useState,
 } from 'react';
+import './MessageInput.css';
 
 type Props = {
   onSend: (text: string) => Promise<void>;
@@ -41,7 +42,7 @@ export const MessageInput = ({ onSend }: Props) => {
   };
 
   return (
-    <>
+    <div className="message-input-container">
         {error && (
             <p className="message-input__error">
                 {error}
@@ -55,7 +56,7 @@ export const MessageInput = ({ onSend }: Props) => {
         <input
             value={text}
             onChange={handleChange}
-            placeholder="Message"
+            placeholder="Write a message..."
             disabled={isSending}
         />
 
@@ -66,6 +67,6 @@ export const MessageInput = ({ onSend }: Props) => {
             {isSending ? 'Sending...' : 'Send'}
         </button>
         </form>
-    </>
+    </div>
   );
 };

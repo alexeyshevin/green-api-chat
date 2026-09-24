@@ -1,9 +1,8 @@
 import {
-    type ChangeEvent,
-    type SyntheticEvent,
-    useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+  useState,
 } from 'react';
-
 import './CreateChatForm.css';
 
 type Props = {

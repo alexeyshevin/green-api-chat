@@ -82,27 +82,37 @@ export const createGreenApi = ({
     return response.json();
   };
 
-    const checkAccount = async (phoneNumber: string): Promise<CheckAccountResponse> => {
-      const response = await fetch(`${baseUrl}/checkAccount/${apiTokenInstance}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            phoneNumber,
-          }),
+    const checkAccount = async (contact: string): Promise<CheckAccountResponse> => {
+    const normalizedContact = contact.trim();
+
+    const requestBody = normalizedContact.startsWith('@')
+      ? {
+          username: normalizedContact,
+        }
+      : {
+          phoneNumber: Number(
+            normalizedContact.replace(/\D/g, ''),
+          ),
+        };
+
+    const response = await fetch(
+      `${baseUrl}/checkAccount/${apiTokenInstance}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(requestBody),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to check account: ${response.status}`,
       );
+    }
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to check account: ${response.status}`,
-        );
-      }
-
-      return response.json();
-    };
+    return response.json();
+  };
 
     const getStateInstance = async (): Promise<GetStateInstanceResponse> => {
       const response = await fetch(`${baseUrl}/getStateInstance/${apiTokenInstance}`);
