@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react';
-
 import { createGreenApi } from './api/greenApi';
 import type { GreenApiCredentials } from './api/types';
 import { AuthForm } from './components/AuthForm/AuthForm';
 import { CreateChatForm } from './components/CreateChatForm/CreateChatForm';
 import type { Chat } from './types/chat';
+import type { Message } from './types/message';
 
 export const App = () => {
   const [credentials, setCredentials] = useState<GreenApiCredentials | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [chat, setChat] = useState<Chat | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isCreatingChat, setIsCreatingChat] = useState(false);
   const [createChatError, setCreateChatError] = useState<string | null>(null);
 
@@ -71,6 +72,42 @@ export const App = () => {
       setCreateChatError('Failed to find Telegram account.');
     } finally {
       setIsCreatingChat(false);
+    }
+  };
+
+  const handleSendMessage = async (text: string) => {
+    if (!api || !chat) {
+      return;
+    }
+
+    const normalizedText = text.trim();
+
+    if (!normalizedText) {
+      return;
+    }
+
+    try {
+      const { idMessage } = await api.sendMessage({
+        chatId: chat.chatId,
+        message: normalizedText,
+      });
+
+      const newMessage: Message = {
+        id: idMessage,
+        text: normalizedText,
+        direction: 'outgoing',
+        timestamp: Date.now(),
+      };
+
+      setMessages((prev) => [
+        ...prev,
+        newMessage,
+      ]);
+    } catch (error) {
+      console.error(
+        'Failed to send message:',
+        error,
+      );
     }
   };
 
