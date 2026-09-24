@@ -1,30 +1,36 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { createGreenApi } from './api/greenApi';
 import type { GreenApiCredentials } from './api/types';
 import { AuthForm } from './components/AuthForm/AuthForm';
+import { CreateChatForm } from './components/CreateChatForm/CreateChatForm';
+import type { Chat } from './types/chat';
 
 export const App = () => {
-  const [credentials, setCredentials] =
-    useState<GreenApiCredentials | null>(null);
+  const [credentials, setCredentials] = useState<GreenApiCredentials | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [chat, setChat] = useState<Chat | null>(null);
+  const [isCreatingChat, setIsCreatingChat] = useState(false);
+  const [createChatError, setCreateChatError] = useState<string | null>(null);
 
-  const [isLoading, setIsLoading] =
-    useState(false);
+  const api = useMemo(() => {
+    if (!credentials) {
+      return null;
+    }
 
-  const [error, setError] =
-    useState<string | null>(null);
+    return createGreenApi(credentials);
+  }, [credentials]);
 
-  const handleLogin = async (
-    newCredentials: GreenApiCredentials,
-  ) => {
+  const handleLogin = async (newCredentials: GreenApiCredentials) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const api = createGreenApi(newCredentials);
+      const loginApi = createGreenApi(newCredentials);
 
       const { stateInstance } =
-        await api.getStateInstance();
+        await loginApi.getStateInstance();
 
       if (stateInstance !== 'authorized') {
         setError(`Instance is not authorized: ${stateInstance}`);
@@ -40,6 +46,34 @@ export const App = () => {
     }
   };
 
+  const handleCreateChat = async (contact: string) => {
+    if (!api) {
+      return;
+    }
+
+    setIsCreatingChat(true);
+    setCreateChatError(null);
+
+    try {
+      const result = await api.checkAccount(contact);
+
+      if (!result.exist || !result.chatId) {
+        setCreateChatError('Telegram account was not found.');
+
+        return;
+      }
+
+      setChat({
+        chatId: result.chatId,
+        contact
+      });
+    } catch {
+      setCreateChatError('Failed to find Telegram account.');
+    } finally {
+      setIsCreatingChat(false);
+    }
+  };
+
   if (!credentials) {
     return (
       <AuthForm
@@ -50,9 +84,21 @@ export const App = () => {
     );
   }
 
+  if (!chat) {
+    return (
+      <CreateChatForm
+        onSubmit={handleCreateChat}
+        isLoading={isCreatingChat}
+        error={createChatError}
+      />
+    );
+  }
+
   return (
     <main>
-      <h1>Chat</h1>
+      <h1>{chat.contact}</h1>
+
+      <p>Chat ID: {chat.chatId}</p>
     </main>
   );
 };
