@@ -2,15 +2,16 @@ import { useMemo, useState } from 'react';
 import { createGreenApi } from './api/greenApi';
 import type { GreenApiCredentials } from './api/types';
 import { AuthForm } from './components/AuthForm/AuthForm';
+import { Chat } from './components/Chat/Chat';
 import { CreateChatForm } from './components/CreateChatForm/CreateChatForm';
-import type { Chat } from './types/chat';
+import type { Chat as ChatType } from './types/chat';
 import type { Message } from './types/message';
 
 export const App = () => {
   const [credentials, setCredentials] = useState<GreenApiCredentials | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [chat, setChat] = useState<Chat | null>(null);
+  const [chat, setChat] = useState<ChatType | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isCreatingChat, setIsCreatingChat] = useState(false);
   const [createChatError, setCreateChatError] = useState<string | null>(null);
@@ -125,10 +126,10 @@ export const App = () => {
   }
 
   return (
-    <main>
-      <h1>{chat.contact}</h1>
-
-      <p>Chat ID: {chat.chatId}</p>
-    </main>
+    <Chat
+      chat={chat}
+      messages={messages}
+      onSendMessage={handleSendMessage}
+    />
   );
 };
