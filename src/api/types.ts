@@ -53,6 +53,10 @@ export type GreenApiNotification = {
   body: UnknownNotificationBody;
 };
 
+export type CheckAccountRequest = {
+  phoneNumber: string;
+};
+
 export type CheckAccountResponse = {
   exist: boolean;
   chatId?: string;
