@@ -1,18 +1,18 @@
 import {
     type ChangeEvent,
-    type FormEvent,
+    type SyntheticEvent,
     useState,
 } from 'react';
-
 import type { GreenApiCredentials } from '../../api/types';
-
 import './AuthForm.css';
 
 type Props = {
   onSubmit: (credentials: GreenApiCredentials) => void;
+  isLoading: boolean;
+  error: string | null;
 };
 
-export const AuthForm = ({ onSubmit }: Props) => {
+export const AuthForm = ({ onSubmit, isLoading, error }: Props) => {
   const [credentials, setCredentials] = useState<GreenApiCredentials>({ idInstance: '', apiTokenInstance: '' });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -24,20 +24,20 @@ export const AuthForm = ({ onSubmit }: Props) => {
     }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault();
 
     const idInstance = credentials.idInstance.trim();
     const apiTokenInstance =
-      credentials.apiTokenInstance.trim();
+        credentials.apiTokenInstance.trim();
 
     if (!idInstance || !apiTokenInstance) {
-      return;
+        return;
     }
 
-    onSubmit({
-      idInstance,
-      apiTokenInstance,
+    await onSubmit({
+        idInstance,
+        apiTokenInstance,
     });
   };
 
@@ -73,9 +73,18 @@ export const AuthForm = ({ onSubmit }: Props) => {
         />
       </label>
 
-      <button type="submit">
-        Sign in
-      </button>
+        {error && (
+            <p className="auth-form__error">
+                {error}
+            </p>
+        )}
+
+        <button
+            type="submit"
+            disabled={isLoading}
+        >
+            {isLoading ? 'Connecting...' : 'Sign in'}
+        </button>
     </form>
   );
 };
