@@ -36,12 +36,17 @@ export type IncomingMessageBody = {
   messageData: TelegramTextMessageData;
 };
 
-export type GreenApiNotification = {
-  receiptId: number;
-  body: IncomingMessageBody;
-};
-
 export type DeleteNotificationResponse = {
   result: boolean;
   reason?: string;
+};
+
+export type UnknownNotificationBody = {
+  typeWebhook: string;
+  [key: string]: unknown;
+};
+
+export type GreenApiNotification = {
+  receiptId: number;
+  body: UnknownNotificationBody;
 };
