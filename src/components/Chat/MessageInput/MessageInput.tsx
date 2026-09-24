@@ -11,6 +11,7 @@ type Props = {
 export const MessageInput = ({ onSend }: Props) => {
   const [text, setText] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
@@ -22,38 +23,49 @@ export const MessageInput = ({ onSend }: Props) => {
     const normalizedText = text.trim();
 
     if (!normalizedText || isSending) {
-      return;
+        return;
     }
 
     setIsSending(true);
+    setError(null);
 
     try {
-      await onSend(normalizedText);
+        await onSend(normalizedText);
 
-      setText('');
+        setText('');
+    } catch {
+        setError('Failed to send message.');
     } finally {
-      setIsSending(false);
+        setIsSending(false);
     }
   };
 
   return (
-    <form
-      className="message-input"
-      onSubmit={handleSubmit}
-    >
-      <input
-        value={text}
-        onChange={handleChange}
-        placeholder="Message"
-        disabled={isSending}
-      />
+    <>
+        {error && (
+            <p className="message-input__error">
+                {error}
+            </p>
+        )}
 
-      <button
-        type="submit"
-        disabled={!text.trim() || isSending}
-      >
-        Send
-      </button>
-    </form>
+        <form
+            className="message-input"
+            onSubmit={handleSubmit}
+        >
+        <input
+            value={text}
+            onChange={handleChange}
+            placeholder="Message"
+            disabled={isSending}
+        />
+
+        <button
+            type="submit"
+            disabled={!text.trim() || isSending}
+        >
+            {isSending ? 'Sending...' : 'Send'}
+        </button>
+        </form>
+    </>
   );
 };
