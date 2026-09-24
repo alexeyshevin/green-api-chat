@@ -52,3 +52,11 @@ export type GreenApiNotification = {
   receiptId: number;
   body: UnknownNotificationBody;
 };
+
+export type CheckAccountResponse = {
+  exist: boolean;
+  chatId?: string;
+  username?: string;
+  phoneNumber?: number;
+  fromCache?: boolean;
+};

@@ -1,4 +1,5 @@
 import type {
+    CheckAccountResponse,
     DeleteNotificationResponse,
     GreenApiCredentials,
     GreenApiNotification,
@@ -80,9 +81,32 @@ export const createGreenApi = ({
     return response.json();
   };
 
+    const checkAccount = async (phoneNumber: string): Promise<CheckAccountResponse> => {
+        const response = await fetch(`${baseUrl}/checkAccount/${apiTokenInstance}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phoneNumber,
+                }),
+            },
+        );
+
+        if (!response.ok) {
+            throw new Error(
+            `Failed to check account: ${response.status}`,
+            );
+        }
+
+        return response.json();
+    };
+
   return {
     sendMessage,
     receiveNotification,
     deleteNotification,
+    checkAccount
   };
 };
