@@ -7,7 +7,7 @@ import { CreateChatForm } from './components/CreateChatForm/CreateChatForm';
 import type { Chat as ChatType } from './types/chat';
 import type { Message } from './types/message';
 
-export const App = () => {
+const App = () => {
   const [credentials, setCredentials] = useState<GreenApiCredentials | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -133,3 +133,5 @@ export const App = () => {
     />
   );
 };
+
+export default App;
