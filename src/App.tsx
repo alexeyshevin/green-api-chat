@@ -1,10 +1,26 @@
-import './App.css'
+import { useState } from 'react';
+import type { GreenApiCredentials } from './api/types';
+import { AuthForm } from './components/AuthForm/AuthForm';
 
-function App() {
+export const App = () => {
+  const [credentials, setCredentials] =
+    useState<GreenApiCredentials | null>(null);
+
+  if (!credentials) {
     return (
-    <>
-    </>
-  )
-}
+      <AuthForm
+        onSubmit={setCredentials}
+      />
+    );
+  }
 
-export default App
+  return (
+    <main>
+      <h1>Chat</h1>
+
+      <p>
+        Instance: {credentials.idInstance}
+      </p>
+    </main>
+  );
+};

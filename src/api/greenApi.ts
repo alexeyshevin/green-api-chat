@@ -1,10 +1,11 @@
 import type {
-    CheckAccountResponse,
-    DeleteNotificationResponse,
-    GreenApiCredentials,
-    GreenApiNotification,
-    SendMessageRequest,
-    SendMessageResponse,
+  CheckAccountResponse,
+  DeleteNotificationResponse,
+  GetStateInstanceResponse,
+  GreenApiCredentials,
+  GreenApiNotification,
+  SendMessageRequest,
+  SendMessageResponse,
 } from './types';
 
 export const createGreenApi = ({
@@ -103,10 +104,23 @@ export const createGreenApi = ({
         return response.json();
     };
 
+    const getStateInstance = async (): Promise<GetStateInstanceResponse> => {
+        const response = await fetch(`${baseUrl}/getStateInstance/${apiTokenInstance}`);
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to get instance state: ${response.status}`,
+            );
+        }
+
+        return response.json();
+    };
+
   return {
     sendMessage,
     receiveNotification,
     deleteNotification,
-    checkAccount
+    checkAccount,
+    getStateInstance
   };
 };

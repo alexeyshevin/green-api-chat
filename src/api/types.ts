@@ -60,3 +60,14 @@ export type CheckAccountResponse = {
   phoneNumber?: number;
   fromCache?: boolean;
 };
+
+export type InstanceState =
+  | 'notAuthorized'
+  | 'authorized'
+  | 'blocked'
+  | 'sleepMode'
+  | 'starting';
+
+export type GetStateInstanceResponse = {
+  stateInstance: InstanceState;
+};
