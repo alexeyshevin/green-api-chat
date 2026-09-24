@@ -21,11 +21,13 @@ export type TelegramTextMessageData = {
 
 export type TelegramSenderData = {
   chatId: string;
-  chatName: string;
+  chatType: 'user' | 'group' | 'supergroup' | 'channel' | 'bot';
   sender: string;
+  chatName: string;
   senderName: string;
+  senderType: 'user' | 'group' | 'supergroup' | 'channel' | 'bot';
   senderContactName: string;
-  senderPhoneNumber?: number;
+  senderPhoneNumber: number;
 };
 
 export type IncomingMessageBody = {
