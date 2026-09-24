@@ -86,29 +86,22 @@ export const App = () => {
       return;
     }
 
-    try {
-      const { idMessage } = await api.sendMessage({
-        chatId: chat.chatId,
-        message: normalizedText,
-      });
+    const { idMessage } = await api.sendMessage({
+      chatId: chat.chatId,
+      message: normalizedText,
+    });
 
-      const newMessage: Message = {
-        id: idMessage,
-        text: normalizedText,
-        direction: 'outgoing',
-        timestamp: Date.now(),
-      };
+    const newMessage: Message = {
+      id: idMessage,
+      text: normalizedText,
+      direction: 'outgoing',
+      timestamp: Date.now(),
+    };
 
-      setMessages((prev) => [
-        ...prev,
-        newMessage,
-      ]);
-    } catch (error) {
-      console.error(
-        'Failed to send message:',
-        error,
-      );
-    }
+    setMessages((prev) => [
+      ...prev,
+      newMessage,
+    ]);
   };
 
   if (!credentials) {
